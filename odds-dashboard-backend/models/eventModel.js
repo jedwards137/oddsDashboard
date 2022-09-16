@@ -78,7 +78,7 @@ const eventSchema = new Schema({
   },
   completed: {
     type: Boolean,
-    required: true
+    required: false
   },
   homeTeam: {
     type: String,
