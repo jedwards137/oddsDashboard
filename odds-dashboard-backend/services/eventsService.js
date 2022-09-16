@@ -13,16 +13,16 @@ const { DateTime } = require('luxon');
 //   return liveEvents;
 // }
 
-const eventsCheckForLive = async () => {
+const eventsGetLiveSportKeys = async () => {
   const currentDtAsGmt = DateTime.now().plus({ hours: 4 });
-  const foundLiveEvent = await Event.exists({ 
+  const liveSportKeys = await Event.find({ 
     commenceTime: {
       $lte: currentDtAsGmt
     },
     completed: false || null
-  });
-  const liveEventsExist = foundLiveEvent !== null ? true : false;
-  return liveEventsExist;
+  }, 'sportKey')
+  .distinct('sportKey');
+  return liveSportKeys;
 }
 
 const eventsGetAll = async () => {
@@ -58,7 +58,7 @@ const eventsBatchUpsert = async (events) => {
 }
 
 module.exports = {
-  eventsCheckForLive,
+  eventsGetLiveSportKeys,
   //eventsGetLive,
   eventsGetAll,
   eventsGetById,

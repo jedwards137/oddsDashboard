@@ -1,23 +1,14 @@
 const { callEndpoint } = require('../common/apiExecutor');
-const { 
-  mapEventsWithOdds,
-  mapEventsWithScores
-} = require('../mappers/eventsMapper');
-const { eventsBatchUpsert } = require('./eventsService');
 
-const americanFootballOddsUpsert = async () => {
-  const rawEvents = await callEndpoint(process.env.ODDS_URI);
-  const mappedEvents = mapEventsWithOdds(rawEvents);
-  eventsBatchUpsert(mappedEvents);
+const getMultiSportEventsData = async (sportList, uriFirst, uriSecond, mapper) => {
+  var eventsDataList = [];
+  await sportList.forEach(async (sportKey) => {
+    const sportUri = uriFirst + sportKey + uriSecond;
+    const rawEventsData = await callEndpoint(sportUri);
+    const mappedEvents = mapper(rawEventsData);
+    eventsDataList.push(...mappedEvents);
+  });
+  return eventsDataList;
 }
 
-const americanFootballScoresUpsert = async () => {
-  const rawScores = await callEndpoint(process.env.SCORES_URI);
-  const mappedEvents = mapEventsWithScores(rawScores);
-  eventsBatchUpsert(mappedEvents);
-}
-
-module.exports = {
-  americanFootballOddsUpsert,
-  americanFootballScoresUpsert
-}
+module.exports = { getMultiSportEventsData }
