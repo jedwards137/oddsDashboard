@@ -1,5 +1,29 @@
 const Event = require('../models/eventModel');
 const mongoose = require('mongoose');
+const { DateTime } = require('luxon');
+
+// const eventsGetLive = async () => {
+//   const currentDt = DateTime.now();
+//   const liveEvents = await Event.find({ 
+//     commenceTime: {
+//       $lte: currentDt
+//     },
+//     completed: false || null
+//   });
+//   return liveEvents;
+// }
+
+const eventsCheckForLive = async () => {
+  const currentDtAsGmt = DateTime.now().plus({ hours: 4 });
+  const foundLiveEvent = await Event.exists({ 
+    commenceTime: {
+      $lte: currentDtAsGmt
+    },
+    completed: false || null
+  });
+  const liveEventsExist = foundLiveEvent !== null ? true : false;
+  return liveEventsExist;
+}
 
 const eventsGetAll = async () => {
   const allEvents = await Event.find();
@@ -18,47 +42,25 @@ const eventsGetById = async (id) => {
   return eventForId;
 }
 
-const eventsCreate = async (requestBody) => {
-  const { eventId, sportKey, sportTitle, commenceTime, completed, homeTeam, awayTeam, scores, eventInfoUpdatedAt, bookmakers } = requestBody;
-  try {
-    const createdEvent = await Event.create({ eventId, sportKey, sportTitle, commenceTime, completed, homeTeam, awayTeam, scores, eventInfoUpdatedAt, bookmakers });
-    return createdEvent;
-  } catch (error) {
-    console.log(error.message);
-    return null;
-  }
-}
-
-const eventsDeleteById = async (id) => {
-  const isValidMongooseId = mongoose.Types.ObjectId.isValid(id);
-  if (!isValidMongooseId) {
-    return null;
-  }
-  const deletedEvent = await Event.findOneAndDelete({ _id: id });
-  if (!deletedEvent) {
-    return null;
-  }
-  return deletedEvent;
-}
-
-const eventsPatchById = async (id, requestBody) => {
-  const isValidMongooseId = mongoose.Types.ObjectId.isValid(id);
-  if (!isValidMongooseId) {
-    return null;
-  }
-  const updatedEvent = await Event.findOneAndReplace({ _id: id }, {
-    ...requestBody
-  });
+const eventsUpsertByEventId = async (id, propertiesToUpdate) => {
+  const updatedEvent = await Event.updateOne(
+    { eventId: id }, 
+    { ...propertiesToUpdate }, 
+    { upsert: true });
   if (!updatedEvent) {
     return null;
   }
   return updatedEvent;
 }
 
+const eventsBatchUpsert = async (events) => {
+  events.forEach(event => { eventsUpsertByEventId(event.eventId, event) });
+}
+
 module.exports = {
+  eventsCheckForLive,
+  //eventsGetLive,
   eventsGetAll,
   eventsGetById,
-  eventsCreate,
-  eventsDeleteById,
-  eventsPatchById
-};
+  eventsBatchUpsert
+}

@@ -2,9 +2,8 @@ require('dotenv').config();
 
 const express = require('express');
 const mongoose = require('mongoose');
-const sportsRoutes = require('./apis/sportsApi/sportsRoutes');
 const eventsRoutes = require('./apis/eventsApi/eventsRoutes');
-const { gameInProgressChecker } = require('./services/jobsService');
+const { startJobs } = require('./services/jobsService');
 
 // list controllers here
 //const dashboardController = require('./dashboardApi/dashboardController');
@@ -21,13 +20,13 @@ app.use((req, res, next) => {
 });
 
 // routes
-app.use('/api/sports', sportsRoutes);
 app.use('/api/events', eventsRoutes);
 
 //connect to db
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
-    gameInProgressChecker.start();
+    startJobs();
+
     //listen for requests
     app.listen (process.env.PORT, () => {
       console.log('connected and listening on port 4000');

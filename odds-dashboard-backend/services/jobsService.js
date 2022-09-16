@@ -1,11 +1,29 @@
 const cron = require('node-cron');
+const { 
+  americanFootballOddsUpsert,
+  americanFootballScoresUpsert
+} = require('./dataService');
+const { eventsCheckForLive } = require('./eventsService');
 
-const gameInProgressChecker = cron.schedule('*/10 * * * * *', () => {
-  console.log('checked progress for games');
+const dailyOddsServicingJob = cron.schedule('0 0 * * *', () => {
+  americanFootballOddsUpsert();
 }, {
   scheduled: false
 });
 
-module.exports = {
-  gameInProgressChecker
-};
+const inProgressScoreCheckJob = cron.schedule('* * * * *', async () => {
+  const liveEventsExist = await eventsCheckForLive();
+  if (!liveEventsExist) {
+    return;
+  }
+  americanFootballScoresUpsert();
+}, {
+  scheduled: false
+});
+
+const startJobs = () => {
+  dailyOddsServicingJob.start();
+  inProgressScoreCheckJob.start();
+}
+
+module.exports = { startJobs }
