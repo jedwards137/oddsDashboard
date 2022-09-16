@@ -2,17 +2,6 @@ const Event = require('../models/eventModel');
 const mongoose = require('mongoose');
 const { DateTime } = require('luxon');
 
-// const eventsGetLive = async () => {
-//   const currentDt = DateTime.now();
-//   const liveEvents = await Event.find({ 
-//     commenceTime: {
-//       $lte: currentDt
-//     },
-//     completed: false || null
-//   });
-//   return liveEvents;
-// }
-
 const eventsGetLiveSportKeys = async () => {
   const currentDtAsGmt = DateTime.now().plus({ hours: 4 });
   const liveSportKeys = await Event.find({ 
@@ -59,7 +48,6 @@ const eventsBatchUpsert = async (events) => {
 
 module.exports = {
   eventsGetLiveSportKeys,
-  //eventsGetLive,
   eventsGetAll,
   eventsGetById,
   eventsBatchUpsert
