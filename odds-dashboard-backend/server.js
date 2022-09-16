@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const eventsRoutes = require('./apis/eventsApi/eventsRoutes');
+const sportsRoutes = require('./apis/sportsApi/sportsRoutes');
 const { startJobs } = require('./services/jobsService');
 
 // list controllers here
@@ -21,6 +22,7 @@ app.use((req, res, next) => {
 
 // routes
 app.use('/api/events', eventsRoutes);
+app.use('/api/sports', sportsRoutes);
 
 //connect to db
 mongoose.connect(process.env.MONGO_URI)
