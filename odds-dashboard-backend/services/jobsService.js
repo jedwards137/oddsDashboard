@@ -8,8 +8,6 @@ const { eventsGetLiveSportKeys, eventsBatchUpsert } = require('./eventsService')
 const { sportsGetActiveKeys } = require('./sportsService');
 
 const dailyOddsServicingJob = cron.schedule('0 6 * * *', async () => {
-//const dailyOddsServicingJob = cron.schedule('*/3 * * * * *', async () => {
-  console.log('servicing');
   const activeSportKeys = await sportsGetActiveKeys();
   const activeSportsOddsData = await getMultiSportEventsData(
     activeSportKeys,
@@ -17,26 +15,12 @@ const dailyOddsServicingJob = cron.schedule('0 6 * * *', async () => {
     process.env.ODDS_URI_SECOND,
     mapEventsWithOdds);
 
-
-    // activeSportsOddsData.forEach(data => {
-    //   data.bookmakers.forEach(bm => {
-    //     bm.markets.forEach(market => {
-    //       market.outcomes.forEach(outcome => {
-    //         console.log(outcome);
-    //       })
-    //     })
-    //   })
-    // })
-
-
   eventsBatchUpsert(activeSportsOddsData);
 }, {
   scheduled: false
 });
 
 const inProgressScoreCheckJob = cron.schedule('* * * * *', async () => {
-//const inProgressScoreCheckJob = cron.schedule('*/3 * * * * *', async () => {
-  //console.log('checking scores');
   const liveSportKeys = await eventsGetLiveSportKeys();
   if (!liveSportKeys || liveSportKeys.length === 0) {
     return;
@@ -46,12 +30,6 @@ const inProgressScoreCheckJob = cron.schedule('* * * * *', async () => {
     process.env.SCORES_URI_FIRST, 
     process.env.SCORES_URI_SECOND, 
     mapEventsWithScores);
-
-
-  // liveSportsScoreData.forEach(data => {
-  //   console.log(data.scores);
-  // })
-
 
   eventsBatchUpsert(liveSportsScoreData);
 }, {
