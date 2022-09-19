@@ -29,7 +29,11 @@ Currently we support three sports: NFL, NCAAF, MLB.
 
 ## Backlog
 
+
+### Features
 - ability to choose which bookmaker's odds are displayed
 - support for more sports
-- refactor db logic with dates/timezones
-- 
+
+### Technical
+- refactor backend db logic with dates/timezones
+- refactor backend uri api logic
