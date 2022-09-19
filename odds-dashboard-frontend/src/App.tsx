@@ -1,7 +1,8 @@
 import React from 'react';
 import {BrowserRouter, Route, Routes} from "react-router-dom";
-import Home from "./pages/Home";
+import HomePage from "./pages/HomePage";
 import Navbar from "./components/Navbar";
+import TickerPage from "./pages/TickerPage";
 
 function App() {
   return (
@@ -12,7 +13,11 @@ function App() {
           <Routes>
             <Route
               path="/"
-              element={<Home />}
+              element={<HomePage />}
+            />
+            <Route
+              path="/ticker"
+              element={<TickerPage />}
             />
           </Routes>
         </div>

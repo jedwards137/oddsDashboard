@@ -17,6 +17,7 @@
     "luxon": "^3.0.3",
     "mongoose": "^6.6.0",
     "node-cron": "^3.0.2",
-    "node-fetch": "^2.6.7"
+    "node-fetch": "^2.6.7",
+    "nodemon": "^2.0.20"
   }
 }
