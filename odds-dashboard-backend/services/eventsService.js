@@ -27,9 +27,28 @@ const eventsGetLiveSportKeys = async () => {
   return liveSportKeys;
 }
 
-const eventsGetAll = async () => {
-  const allEvents = await Event.find();
-  return allEvents;
+const eventsGetTodayBySport = async (requestedSports) => {
+  var events = [];
+  const startOfToday = DateTime.now().set({ hour: 4, minute: 0, second: 0, millisecond: 0 });
+  const startOfTomorrow = startOfToday.plus({ days: 1 });
+  console.log( startOfToday, startOfTomorrow);
+  for(const sportKey of requestedSports) {
+    const eventsForSport = await Event
+      .find({ 
+        sportKey: sportKey, 
+        commenceTime: {
+          $gte: startOfToday,
+          $lte: startOfTomorrow
+        }
+      })
+      .sort({ commenceTime: 'asc' });
+    const eventsForSportObject = {
+      sportKey: sportKey,
+      events: eventsForSport
+    }
+    events = events.concat(eventsForSportObject);
+  }
+  return events;
 }
 
 const eventsGetById = async (id) => {
@@ -62,7 +81,7 @@ const eventsBatchUpsert = async (events) => {
 module.exports = {
   eventsGetActiveSports,
   eventsGetLiveSportKeys,
-  eventsGetAll,
+  eventsGetTodayBySport,
   eventsGetById,
   eventsBatchUpsert
 }

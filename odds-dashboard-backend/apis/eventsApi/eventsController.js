@@ -1,11 +1,13 @@
 const { 
-  eventsGetAll,
+  eventsGetTodayBySport,
   eventsGetById
 } = require('../../services/eventsService');
 const { parseServiceResponse } = require('../common/responseParser');
 
-const getAllEvents = async (req, res) => {
-  const allEvents = await eventsGetAll();
+const getTodaysEvents = async (req, res) => {
+  const requestedSports = req.query.sports.split(',');
+  const allEvents = await eventsGetTodayBySport(requestedSports);
+  console.log(allEvents);
   const response = parseServiceResponse(allEvents, res);
   return response;
 }
@@ -18,6 +20,6 @@ const getEventById = async (req, res) => {
 }
 
 module.exports = {
-  getAllEvents,
+  getTodaysEvents,
   getEventById
 }
