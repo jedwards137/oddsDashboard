@@ -16,7 +16,7 @@ app.use(express.json());
 
 // global middleware before express moves onto routes
 app.use((req, res, next) => {
-  console.log(req.path, req.method);
+  console.log(req.method, req.path, req.query);
   next();
 });
 

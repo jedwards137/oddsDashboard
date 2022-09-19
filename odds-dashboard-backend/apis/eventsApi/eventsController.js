@@ -7,7 +7,6 @@ const { parseServiceResponse } = require('../common/responseParser');
 const getTodaysEvents = async (req, res) => {
   const requestedSports = req.query.sports.split(',');
   const allEvents = await eventsGetTodayBySport(requestedSports);
-  console.log(allEvents);
   const response = parseServiceResponse(allEvents, res);
   return response;
 }
