@@ -6,7 +6,7 @@ const {
 
 const router = express.Router();
 
-router.get('/', getTodaysEvents);
+router.get('/today', getTodaysEvents);
 router.get('/:id', getEventById);
 
 module.exports = router;

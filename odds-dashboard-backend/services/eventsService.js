@@ -31,7 +31,6 @@ const eventsGetTodayBySport = async (requestedSports) => {
   var events = [];
   const startOfToday = DateTime.now().set({ hour: 4, minute: 0, second: 0, millisecond: 0 });
   const startOfTomorrow = startOfToday.plus({ days: 1 });
-  console.log( startOfToday, startOfTomorrow);
   for(const sportKey of requestedSports) {
     const eventsForSport = await Event
       .find({ 

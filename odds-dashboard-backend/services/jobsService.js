@@ -14,13 +14,12 @@ const dailyOddsServicingJob = cron.schedule('0 6 * * *', async () => {
     process.env.ODDS_URI_FIRST,
     process.env.ODDS_URI_SECOND,
     mapEventsWithOdds);
-
   eventsBatchUpsert(activeSportsOddsData);
 }, {
   scheduled: false
 });
 
-const inProgressScoreCheckJob = cron.schedule('* * * * *', async () => {
+const inProgressScoreCheckJob = cron.schedule('*/3 * * * *', async () => {
   const liveSportKeys = await eventsGetLiveSportKeys();
   if (!liveSportKeys || liveSportKeys.length === 0) {
     return;
@@ -30,7 +29,6 @@ const inProgressScoreCheckJob = cron.schedule('* * * * *', async () => {
     process.env.SCORES_URI_FIRST, 
     process.env.SCORES_URI_SECOND, 
     mapEventsWithScores);
-
   eventsBatchUpsert(liveSportsScoreData);
 }, {
   scheduled: false

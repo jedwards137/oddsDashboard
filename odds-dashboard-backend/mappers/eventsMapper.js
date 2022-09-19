@@ -73,7 +73,7 @@ const mapEventsWithScores = (rawEvents) => {
       scores: mapScores(rawEvent.scores)
     };
     if (rawEvent.completed === true) {
-      //mappedEvent.completed = true;
+      mappedEvent.completed = true;
     }
     return mappedEvent;
   });
