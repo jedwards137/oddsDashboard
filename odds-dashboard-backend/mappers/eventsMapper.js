@@ -55,6 +55,7 @@ const mapEventsWithOdds = (rawEvents) => {
       sportKey: rawEvent.sport_key,
       sportTitle: rawEvent.sport_title,
       commenceTime: rawEvent.commence_time,
+      completed: false,
       homeTeam: rawEvent.home_team,
       awayTeam: rawEvent.away_team,
       bookmakers: mapBookmakers(rawEvent.bookmakers)
@@ -70,11 +71,9 @@ const mapEventsWithScores = (rawEvents) => {
   .map((rawEvent) => {
     let mappedEvent = {
       eventId: rawEvent.id,
-      scores: mapScores(rawEvent.scores)
+      scores: mapScores(rawEvent.scores),
+      completed: rawEvent.completed
     };
-    if (rawEvent.completed === true) {
-      mappedEvent.completed = true;
-    }
     return mappedEvent;
   });
   return mappedEvents;

@@ -21,7 +21,7 @@ const eventsGetLiveSportKeys = async () => {
       commenceTime: {
         $lte: currentDtAsGmt
       },
-      completed: false || null
+      completed: false
     }, 'sportKey')
     .distinct('sportKey');
   return liveSportKeys;

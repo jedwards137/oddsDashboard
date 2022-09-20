@@ -36,3 +36,6 @@ Currently we support three sports: NFL, NCAAF, MLB.
 ### Technical
 - refactor backend db logic with dates/timezones
 - refactor backend uri api logic
+
+### Moonshot
+- recovery service to run daily(maybe more often?) and check for lapses in data and fetch missing data

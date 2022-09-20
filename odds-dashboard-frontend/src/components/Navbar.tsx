@@ -1,4 +1,3 @@
-import {Link} from "react-router-dom";
 import {AppBar, Box, Toolbar, Typography} from "@mui/material";
 
 const Navbar = () => {

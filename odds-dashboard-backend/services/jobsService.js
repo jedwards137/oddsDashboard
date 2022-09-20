@@ -7,7 +7,7 @@ const { getMultiSportEventsData } = require('./dataService');
 const { eventsGetLiveSportKeys, eventsBatchUpsert } = require('./eventsService');
 const { sportsGetActiveKeys } = require('./sportsService');
 
-const dailyOddsServicingJob = cron.schedule('0 6 * * *', async () => {
+const dailyOddsServicingJob = cron.schedule('0 7 * * *', async () => {
   const activeSportKeys = await sportsGetActiveKeys();
   const activeSportsOddsData = await getMultiSportEventsData(
     activeSportKeys,
@@ -19,11 +19,12 @@ const dailyOddsServicingJob = cron.schedule('0 6 * * *', async () => {
   scheduled: false
 });
 
-const inProgressScoreCheckJob = cron.schedule('*/3 * * * *', async () => {
+const inProgressScoreCheckJob = cron.schedule('*/5 * * * *', async () => {
   const liveSportKeys = await eventsGetLiveSportKeys();
   if (!liveSportKeys || liveSportKeys.length === 0) {
     return;
   }
+  console.log(liveSportKeys);
   const liveSportsScoreData = await getMultiSportEventsData(
     liveSportKeys, 
     process.env.SCORES_URI_FIRST, 
