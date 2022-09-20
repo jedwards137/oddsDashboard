@@ -13,7 +13,7 @@ const TickerPage = () => {
       }
     }
 
-    fetchOdds();
+    //fetchOdds();
   }, [])
 
   return (
